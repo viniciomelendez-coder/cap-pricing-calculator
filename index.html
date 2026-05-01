@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Cap Pricing">
+<meta name="theme-color" content="#F7F4EF">
+<title>G&B · Cap Pricing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,800;1,9..144,400&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ─── TOKENS ─── */
+:root {
+  --cream: #F7F4EF;
+  --white: #FFFFFF;
+  --ink: #1A1712;
+  --ink2: #3D3830;
+  --ink3: #7A7268;
+  --line: #E5E0D8;
+  --line2: #D0C9BE;
+  --gold: #B8832A;
+  --gold-bg: #FDF6E9;
+  --gold-border: #E8C878;
+  --green: #2D7A52;
+  --green-bg: #EBF5F0;
+  --blue: #2355A0;
+  --blue-bg: #EEF3FC;
+  --red: #C0392B;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow: 0 4px 16px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
+  --r: 18px;
+  --r-sm: 12px;
+  --r-xs: 8px;
+  --safe-b: env(safe-area-inset-bottom, 16px);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  background: var(--cream);
+  font-family: 'Outfit', system-ui, sans-serif;
+  color: var(--ink);
+  max-width: 430px;
+  margin: 0 auto;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Safe area top */
+.safe-top { height: env(safe-area-inset-top, 0); background: var(--cream); }
+
+/* ─── HEADER ─── */
+.app-header {
+  background: var(--cream);
+  padding: 14px 20px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.logo-text {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 19px;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: -0.5px;
+}
+.logo-text em {
+  font-style: italic;
+  color: var(--gold);
+}
+.header-badge {
+  background: var(--gold-bg);
+  border: 1px solid var(--gold-border);
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gold);
+}
+
+/* ─── SCREEN SYSTEM ─── */
+.screen { display: none; }
+.screen.show { display: block; }
+
+/* ─── SCROLL BODY ─── */
+.body { padding: 20px 16px; padding-bottom: calc(100px + var(--safe-b)); }
+
+/* ─── SECTION LABEL ─── */
+.slabel {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink3);
+  margin-bottom: 10px;
+  margin-top: 24px;
+  padding-left: 4px;
+}
+.slabel:first-child { margin-top: 4px; }
+
+/* ─── CARD ─── */
+.card {
+  background: var(--white);
+  border-radius: var(--r);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--line);
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+/* ─── QTY CARD ─── */
+.qty-card {
+  background: var(--white);
+  border-radius: var(--r);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--line);
+  padding: 20px;
+  margin-bottom: 12px;
+}
+.qty-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.qty-top-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink3);
+  letter-spacing: 0.02em;
+}
+.range-tag {
+  background: var(--gold-bg);
+  border: 1px solid var(--gold-border);
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gold);
+}
+.qty-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.qty-btn {
+  width: 56px;
+  height: 56px;
+  background: var(--cream);
+  border: 1.5px solid var(--line2);
+  border-radius: 14px;
+  font-size: 28px;
+  font-weight: 300;
+  color: var(--ink2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.1s, transform 0.1s;
+  user-select: none;
+}
+.qty-btn:active { background: var(--line); transform: scale(0.93); }
+.qty-number-wrap {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+.qty-number {
+  font-family: 'Fraunces', serif;
+  font-size: 56px;
+  font-weight: 800;
+  color: var(--ink);
+  text-align: center;
+  background: transparent;
+  border: none;
+  outline: none;
+  width: 100%;
+  cursor: text;
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+  line-height: 1;
+}
+.qty-number::-webkit-inner-spin-button,
+.qty-number::-webkit-outer-spin-button { -webkit-appearance: none; }
+.qty-number:focus { color: var(--gold); }
+.qty-unit {
+  font-size: 13px;
+  color: var(--ink3);
+  font-weight: 500;
+  text-align: center;
+  margin-top: 4px;
+}
+
+/* Quick picks */
+.quick-picks {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.qp {
+  flex: 1;
+  min-width: 48px;
+  padding: 9px 4px;
+  background: var(--cream);
+  border: 1.5px solid var(--line2);
+  border-radius: var(--r-xs);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink2);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.12s;
+  user-select: none;
+}
+.qp:active { transform: scale(0.94); }
+.qp.on {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--white);
+}
+
+/* ─── SEGMENT SELECTOR ─── */
+.seg-wrap {
+  background: var(--white);
+  border-radius: var(--r);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-sm);
+  padding: 6px;
+  display: grid;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.seg-wrap.cols3 { grid-template-columns: 1fr 1fr 1fr; }
+.seg-wrap.cols2 { grid-template-columns: 1fr 1fr; }
+.seg-item {
+  border-radius: 12px;
+  padding: 14px 8px 12px;
+  cursor: pointer;
+  user-select: none;
+  text-align: center;
+  transition: all 0.15s;
+  border: 2px solid transparent;
+}
+.seg-item:active { transform: scale(0.96); }
+.seg-icon { font-size: 26px; margin-bottom: 5px; line-height: 1; }
+.seg-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+.seg-sub { font-size: 11px; color: var(--ink3); line-height: 1.3; }
+
+/* Quality active states */
+.seg-item.q-on {
+  background: var(--gold-bg);
+  border-color: var(--gold-border);
+}
+.seg-item.q-on .seg-title { color: var(--gold); }
+
+/* Margin items */
+.m-soft   .seg-title { color: var(--blue); }
+.m-medium .seg-title { color: var(--gold); }
+.m-agg    .seg-title { color: var(--red); }
+.m-soft.m-on   { background: var(--blue-bg);  border-color: #8AAAD8; }
+.m-medium.m-on { background: var(--gold-bg);  border-color: var(--gold-border); }
+.m-agg.m-on    { background: #FEF0EE; border-color: #E8A090; }
+
+.seg-mult {
+  font-family: 'Fraunces', serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--ink2);
+  margin-bottom: 3px;
+}
+.m-on .seg-mult { color: var(--ink); }
+
+/* ─── RESULT HERO ─── */
+.result-hero {
+  background: var(--ink);
+  border-radius: var(--r);
+  padding: 22px 20px 20px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+}
+.result-hero::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 160px; height: 160px;
+  background: radial-gradient(circle, rgba(184,131,42,0.2) 0%, transparent 70%);
+  pointer-events: none;
+}
+.rh-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 4px;
+}
+.rh-price {
+  font-family: 'Fraunces', serif;
+  font-size: 72px;
+  font-weight: 800;
+  color: #F5D988;
+  line-height: 1;
+  margin-bottom: 4px;
+  letter-spacing: -2px;
+}
+.rh-sub {
+  font-size: 14px;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 18px;
+}
+.rh-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  border-top: 1px solid rgba(255,255,255,0.12);
+  padding-top: 16px;
+}
+.rhs-label {
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
+  font-weight: 500;
+  margin-bottom: 4px;
+  letter-spacing: 0.02em;
+}
+.rhs-val {
+  font-size: 18px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.9);
+}
+.rhs-val.g { color: #6FD4A0; }
+.rhs-val.y { color: #F5D988; }
+
+/* ─── THREE TILES ─── */
+.three-tiles {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.tile {
+  background: var(--white);
+  border: 2px solid var(--line);
+  border-radius: 14px;
+  padding: 14px 8px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.15s;
+  user-select: none;
+}
+.tile:active { transform: scale(0.95); }
+.tile.picked { border-color: var(--ink); background: var(--cream); box-shadow: var(--shadow-sm); }
+.tile-badge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.tile.t-soft   .tile-badge { color: var(--blue); }
+.tile.t-medium .tile-badge { color: var(--gold); }
+.tile.t-agg    .tile-badge { color: var(--red); }
+.tile-price {
+  font-family: 'Fraunces', serif;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--ink);
+  margin-bottom: 3px;
+}
+.tile-pct { font-size: 12px; font-weight: 600; color: var(--green); }
+.tile-tot { font-size: 10px; color: var(--ink3); margin-top: 3px; }
+.tap-hint {
+  font-size: 11px;
+  color: var(--ink3);
+  text-align: center;
+  padding: 4px 0 8px;
+  letter-spacing: 0.02em;
+}
+
+/* ─── BREAKDOWN ─── */
+.breakdown-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px;
+  cursor: pointer;
+  user-select: none;
+}
+.bt-label { font-size: 16px; font-weight: 600; color: var(--ink2); }
+.bt-arrow {
+  font-size: 13px;
+  color: var(--ink3);
+  transition: transform 0.2s;
+}
+.bt-arrow.open { transform: rotate(180deg); }
+.bd-rows { display: none; border-top: 1px solid var(--line); }
+.bd-rows.show { display: block; }
+.bd-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 18px;
+  border-bottom: 1px solid var(--line);
+}
+.bd-row:last-child { border-bottom: none; }
+.bd-left { display: flex; align-items: center; gap: 10px; }
+.bd-ico { font-size: 20px; }
+.bd-name { font-size: 15px; color: var(--ink2); }
+.bd-amt { font-size: 16px; font-weight: 700; color: var(--ink); font-family: 'Fraunces', serif; }
+.bd-total-row {
+  background: var(--gold-bg);
+  border-top: 1px solid var(--gold-border) !important;
+}
+.bd-total-row .bd-name { font-weight: 700; color: var(--gold); }
+.bd-total-row .bd-amt { color: var(--gold); font-size: 20px; }
+
+/* ─── QUOTE CARD ─── */
+.quote-card {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.qc-body {
+  padding: 18px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  line-height: 1.9;
+  color: var(--ink2);
+  white-space: pre-wrap;
+  min-height: 120px;
+}
+.qc-copy {
+  width: 100%;
+  padding: 17px;
+  background: var(--ink);
+  color: var(--white);
+  font-family: 'Outfit', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background 0.15s;
+  user-select: none;
+  letter-spacing: 0.02em;
+}
+.qc-copy:active { background: var(--ink2); }
+.qc-copy.ok { background: var(--green); }
+
+/* ─── CLIENT INPUT ─── */
+.text-input {
+  width: 100%;
+  background: var(--white);
+  border: 1.5px solid var(--line2);
+  color: var(--ink);
+  font-family: 'Outfit', sans-serif;
+  font-size: 16px;
+  padding: 15px 16px;
+  border-radius: var(--r-sm);
+  outline: none;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 12px;
+  transition: border-color 0.15s;
+}
+.text-input::placeholder { color: var(--ink3); }
+.text-input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(184,131,42,0.1); }
+
+/* ─── BOTTOM NAV ─── */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  background: rgba(247,244,239,0.95);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-top: 1px solid var(--line);
+  padding: 8px 16px calc(8px + var(--safe-b));
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  z-index: 100;
+}
+.nav-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 8px 4px;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 10px;
+  transition: background 0.12s;
+}
+.nav-btn:active { background: var(--line); }
+.nav-ico { font-size: 24px; line-height: 1; }
+.nav-lbl {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink3);
+}
+.nav-btn.on .nav-lbl { color: var(--gold); }
+.nav-btn.on .nav-ico { filter: saturate(2); }
+
+/* ─── COST EDITOR ─── */
+.ce-group {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.ce-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px;
+  cursor: pointer;
+  user-select: none;
+}
+.ce-head-l { display: flex; align-items: center; gap: 10px; }
+.ce-head-ico { font-size: 22px; }
+.ce-head-title { font-size: 16px; font-weight: 700; color: var(--ink); }
+.ce-head-arr { font-size: 12px; color: var(--ink3); transition: transform 0.2s; }
+.ce-head-arr.open { transform: rotate(180deg); }
+.ce-body { display: none; border-top: 1px solid var(--line); }
+.ce-body.show { display: block; }
+.ce-range-hdr {
+  padding: 8px 18px 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: var(--gold-bg);
+  border-bottom: 1px solid var(--line);
+}
+.ce-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 18px;
+  border-bottom: 1px solid var(--line);
+}
+.ce-row:last-child { border-bottom: none; }
+.ce-row-lbl { font-size: 14px; color: var(--ink2); }
+.ce-inp {
+  width: 90px;
+  background: var(--cream);
+  border: 1.5px solid var(--line2);
+  color: var(--ink);
+  font-family: 'Fraunces', serif;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: right;
+  padding: 8px 10px;
+  border-radius: 8px;
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+}
+.ce-inp:focus { border-color: var(--gold); background: var(--white); }
+.reset-btn {
+  width: 100%;
+  padding: 16px;
+  background: transparent;
+  border: 1.5px solid var(--line2);
+  color: var(--ink3);
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  margin-top: 6px;
+  transition: all 0.15s;
+  user-select: none;
+}
+.reset-btn:active { border-color: var(--red); color: var(--red); }
+
+/* ─── NOTICE ─── */
+.notice {
+  background: var(--gold-bg);
+  border: 1px solid var(--gold-border);
+  border-radius: var(--r-sm);
+  padding: 13px 15px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink2);
+  margin-bottom: 14px;
+}
+.notice strong { color: var(--gold); }
+
+/* ─── RESEARCH NOTES ─── */
+.note-card {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  overflow: hidden;
+  margin-bottom: 10px;
+  box-shadow: var(--shadow-sm);
+}
+.nc-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px;
+  cursor: pointer;
+  user-select: none;
+}
+.nc-title { font-size: 16px; font-weight: 700; color: var(--ink); }
+.nc-arr { font-size: 12px; color: var(--ink3); transition: transform 0.2s; }
+.nc-arr.open { transform: rotate(180deg); }
+.nc-body { display: none; padding: 0 18px 18px; border-top: 1px solid var(--line); }
+.nc-body.show { display: block; }
+.nc-body p { font-size: 14px; line-height: 1.75; color: var(--ink2); margin-top: 12px; }
+.nc-body strong { color: var(--ink); font-weight: 700; }
+.tag {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  margin: 10px 4px 0 0;
+}
+.tag.c  { background: var(--green-bg); color: var(--green); }
+.tag.e  { background: var(--gold-bg); color: var(--gold); }
+.tag.est{ background: var(--blue-bg); color: var(--blue); }
+
+/* ─── TRANSITIONS ─── */
+@keyframes pop {
+  0%   { transform: scale(0.97); opacity: 0.7; }
+  60%  { transform: scale(1.01); }
+  100% { transform: scale(1);    opacity: 1; }
+}
+.result-hero { animation: pop 0.25s ease; }
+</style>
+</head>
+<body>
+<div class="safe-top"></div>
+
+<!-- HEADER -->
+<header class="app-header">
+  <div class="logo-text">Grain &amp; <em>Brand</em></div>
+  <div class="header-badge" id="hdr-badge">21–50 pcs</div>
+</header>
+
+<!-- ══ SCREEN: CALCULATOR ══ -->
+<div class="screen show" id="scr-calc">
+<div class="body">
+
+  <!-- QUANTITY -->
+  <div class="slabel">How many caps?</div>
+  <div class="qty-card">
+    <div class="qty-top">
+      <div class="qty-top-label">Quantity</div>
+    </div>
+    <div class="qty-main">
+      <div class="qty-btn" onclick="adj(-1)" role="button" aria-label="Decrease">−</div>
+      <div class="qty-number-wrap">
+        <input class="qty-number" type="number" id="qty"
+          value="24" min="1" max="9999"
+          inputmode="numeric" pattern="[0-9]*"
+          onclick="this.select()"
+          onfocus="this.select()"
+          oninput="calc()">
+      </div>
+      <div class="qty-btn" onclick="adj(1)" role="button" aria-label="Increase">+</div>
+    </div>
+    <div class="qty-unit">pieces</div>
+    <!-- Quick picks -->
+    <div class="quick-picks" id="qp-row">
+      <div class="qp" onclick="setQ(1)">1</div>
+      <div class="qp" onclick="setQ(6)">6</div>
+      <div class="qp" onclick="setQ(12)">12</div>
+      <div class="qp on" onclick="setQ(24)">24</div>
+      <div class="qp" onclick="setQ(50)">50</div>
+      <div class="qp" onclick="setQ(100)">100</div>
+      <div class="qp" onclick="setQ(150)">150</div>
+      <div class="qp" onclick="setQ(300)">300</div>
+    </div>
+  </div>
+
+  <!-- QUALITY -->
+  <div class="slabel">Cap Quality</div>
+  <div class="seg-wrap cols3">
+    <div class="seg-item q-on" data-q="traditional" onclick="setQual(this)">
+      <div class="seg-icon">🧢</div>
+      <div class="seg-title">Traditional</div>
+      <div class="seg-sub">Budget-friendly</div>
+    </div>
+    <div class="seg-item" data-q="medio" onclick="setQual(this)">
+      <div class="seg-icon">⭐</div>
+      <div class="seg-title">Mid-Level</div>
+      <div class="seg-sub">Better feel</div>
+    </div>
+    <div class="seg-item" data-q="premium" onclick="setQual(this)">
+      <div class="seg-icon">👑</div>
+      <div class="seg-title">Premium</div>
+      <div class="seg-sub">High-end brand</div>
+    </div>
+  </div>
+
+  <!-- MARGIN -->
+  <div class="slabel">Margin Strategy</div>
+  <div class="seg-wrap cols3">
+    <div class="seg-item m-soft" data-m="soft" onclick="setMargin(this)">
+      <div class="seg-mult" id="ms-s">×1.55</div>
+      <div class="seg-title">Soft</div>
+      <div class="seg-sub">Close the deal</div>
+    </div>
+    <div class="seg-item m-medium m-on" data-m="medium" onclick="setMargin(this)">
+      <div class="seg-mult" id="ms-m">×1.80</div>
+      <div class="seg-title">Medium</div>
+      <div class="seg-sub">Recommended ✓</div>
+    </div>
+    <div class="seg-item m-agg" data-m="aggressive" onclick="setMargin(this)">
+      <div class="seg-mult" id="ms-a">×2.10</div>
+      <div class="seg-title">Aggressive</div>
+      <div class="seg-sub">Max profit</div>
+    </div>
+  </div>
+
+  <!-- RESULT HERO -->
+  <div class="result-hero" id="hero-card">
+    <div class="rh-label" id="rh-label">PRICE PER PIECE · MEDIUM</div>
+    <div class="rh-price" id="rh-price">$18.00</div>
+    <div class="rh-sub" id="rh-sub">Traditional · 24 pieces</div>
+    <div class="rh-stats">
+      <div>
+        <div class="rhs-label">Cost / pc</div>
+        <div class="rhs-val" id="rh-cost">$9.80</div>
+      </div>
+      <div>
+        <div class="rhs-label">Profit / pc</div>
+        <div class="rhs-val g" id="rh-gp">$8.20</div>
+      </div>
+      <div>
+        <div class="rhs-label">Total Profit</div>
+        <div class="rhs-val y" id="rh-gt">$196</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 TILES -->
+  <div class="tap-hint">Tap any option to select it →</div>
+  <div class="three-tiles">
+    <div class="tile t-soft" onclick="pickTile('soft')">
+      <div class="tile-badge">Soft</div>
+      <div class="tile-price" id="til-s">$15.00</div>
+      <div class="tile-pct" id="til-s-m">38%</div>
+      <div class="tile-tot" id="til-s-t">$124 profit</div>
+    </div>
+    <div class="tile t-medium picked" onclick="pickTile('medium')">
+      <div class="tile-badge">Medium ★</div>
+      <div class="tile-price" id="til-m">$18.00</div>
+      <div class="tile-pct" id="til-m-m">46%</div>
+      <div class="tile-tot" id="til-m-t">$197 profit</div>
+    </div>
+    <div class="tile t-agg" onclick="pickTile('aggressive')">
+      <div class="tile-badge">Aggressive</div>
+      <div class="tile-price" id="til-a">$21.00</div>
+      <div class="tile-pct" id="til-a-m">53%</div>
+      <div class="tile-tot" id="til-a-t">$270 profit</div>
+    </div>
+  </div>
+
+  <!-- BREAKDOWN -->
+  <div class="card">
+    <div class="breakdown-toggle-row" onclick="toggleBd()">
+      <div class="bt-label">📊 See Cost Breakdown</div>
+      <div class="bt-arrow" id="bd-arr">▼</div>
+    </div>
+    <div class="bd-rows" id="bd-rows">
+      <div class="bd-row"><div class="bd-left"><div class="bd-ico">🧢</div><div class="bd-name">Blank Cap</div></div><div class="bd-amt" id="bd-cap">$5.00</div></div>
+      <div class="bd-row"><div class="bd-left"><div class="bd-ico">🎨</div><div class="bd-name">DTF Transfer</div></div><div class="bd-amt" id="bd-tr">$2.30</div></div>
+      <div class="bd-row"><div class="bd-left"><div class="bd-ico">🤲</div><div class="bd-name">Labor</div></div><div class="bd-amt" id="bd-lb">$1.00</div></div>
+      <div class="bd-row"><div class="bd-left"><div class="bd-ico">📦</div><div class="bd-name">Extras</div></div><div class="bd-amt" id="bd-ex">$0.75</div></div>
+      <div class="bd-row"><div class="bd-left"><div class="bd-ico">♻️</div><div class="bd-name">Waste/Shrink</div></div><div class="bd-amt" id="bd-me">$0.35</div></div>
+      <div class="bd-row"><div class="bd-left"><div class="bd-ico">🚚</div><div class="bd-name">Shipping / pc</div></div><div class="bd-amt" id="bd-sh">$1.04</div></div>
+      <div class="bd-row bd-total"><div class="bd-left"><div class="bd-ico">💰</div><div class="bd-name">Total Cost / pc</div></div><div class="bd-amt" id="bd-cp">$10.44</div></div>
+    </div>
+  </div>
+
+</div>
+</div><!-- /scr-calc -->
+
+<!-- ══ SCREEN: QUOTE ══ -->
+<div class="screen" id="scr-quote">
+<div class="body">
+
+  <div class="slabel">Client Name (optional)</div>
+  <input class="text-input" id="client" type="text" placeholder="e.g. Lone Star BBQ Co." oninput="genQ()">
+
+  <div class="slabel">Quote Style</div>
+  <div class="seg-wrap cols2" style="margin-bottom:18px">
+    <div class="seg-item q-on" id="qs-simple" onclick="setQS('simple')" style="padding:12px 8px;">
+      <div class="seg-title">Simple</div>
+      <div class="seg-sub">Clean, direct pricing</div>
+    </div>
+    <div class="seg-item" id="qs-detailed" onclick="setQS('detailed')" style="padding:12px 8px;">
+      <div class="seg-title">Detailed</div>
+      <div class="seg-sub">Full breakdown</div>
+    </div>
+  </div>
+
+  <div class="slabel">Your Quote</div>
+  <div class="quote-card">
+    <div class="qc-body" id="q-main">...</div>
+    <button class="qc-copy" id="q-copy-btn" onclick="copyQ('q-main','q-copy-btn')">📋 Copy &amp; Send</button>
+  </div>
+
+  <div class="slabel">All 3 Options</div>
+  <div class="quote-card">
+    <div class="qc-body" id="q-all">...</div>
+    <button class="qc-copy" onclick="copyQ('q-all',null)">📋 Copy All Options</button>
+  </div>
+
+</div>
+</div>
+
+<!-- ══ SCREEN: EDIT COSTS ══ -->
+<div class="screen" id="scr-costs">
+<div class="body">
+  <div class="notice"><strong>All values are editable.</strong> Tap a section to expand it. Changes save automatically.</div>
+  <div id="ce-container"></div>
+  <button class="reset-btn" onclick="resetAll()">↺ Reset All to Defaults</button>
+</div>
+</div>
+
+<!-- ══ SCREEN: RESEARCH ══ -->
+<div class="screen" id="scr-research">
+<div class="body">
+  <div class="notice"><strong>Market data verified May 2025</strong> — CapBargain (OTTO CAP), Ninja Transfers, and 100+ supplier comparison.</div>
+
+  <div class="note-card">
+    <div class="nc-head" onclick="toggleNote(this)"><div class="nc-title">📦 Blank Cap Costs</div><div class="nc-arr">▼</div></div>
+    <div class="nc-body">
+      <span class="tag c">Confirmed</span><span class="tag e">Editable</span>
+      <p><strong>Source: CapBargain.com (OTTO CAP)</strong><br>For 1–5 pcs (no wholesale min at CapBargain), entry-level OTTO CAP structured caps start at <strong>$5.61–$5.75/pc</strong>. That's your real menudeo baseline.</p>
+      <p>For 6–20 pcs, small-volume pricing kicks in: <strong>$5–$7.50/pc</strong>. At 20+ pcs, wholesale pricing: <strong>$4–$6.50/pc</strong>. Premium caps (Richardson 112, Flexfit) run <strong>$8–$14/pc</strong> at wholesale.</p>
+      <p>The calculator uses slightly conservative numbers to account for color variability and quality consistency across orders.</p>
+    </div>
+  </div>
+
+  <div class="note-card">
+    <div class="nc-head" onclick="toggleNote(this)"><div class="nc-title">🎨 DTF Transfer Costs</div><div class="nc-arr">▼</div></div>
+    <div class="nc-body">
+      <span class="tag c">Confirmed</span><span class="tag e">Editable</span>
+      <p><strong>Source: Ninja Transfers</strong><br>Gang sheets price at <strong>$0.02/sq inch</strong>. A 4"×4" cap-front design = 16 sq in = <strong>$0.32</strong> at max bulk. But with gang sheet waste, small runs, and ordering minimums, real cost is <strong>$1.80–$2.75/pc</strong>.</p>
+      <p>Small orders (1–5 caps) cost more per transfer because you can't fill a full gang sheet. This is already factored into the range-based pricing.</p>
+    </div>
+  </div>
+
+  <div class="note-card">
+    <div class="nc-head" onclick="toggleNote(this)"><div class="nc-title">📊 Are My Prices Competitive?</div><div class="nc-arr">▼</div></div>
+    <div class="nc-body">
+      <span class="tag c">Market Research</span>
+      <p><strong>What the market charges for custom DTF caps:</strong><br>
+      Single cap: <strong>$22–$35</strong> retail<br>
+      Small run (6–20): <strong>$15–$25/pc</strong><br>
+      Mid bulk (21–50): <strong>$14–$22/pc</strong><br>
+      Wholesale (100+): <strong>$9–$18/pc</strong></p>
+      <p><strong>Your Medium margin</strong> lands 10–20% below average market — competitive and profitable. Not the cheapest (which signals low quality) and not the most expensive (which loses price-sensitive clients).</p>
+      <p>Use <strong>Soft</strong> to win new clients or close large volume. Use <strong>Aggressive</strong> for rush orders, complex designs, or repeat clients who already trust you.</p>
+    </div>
+  </div>
+
+  <div class="note-card">
+    <div class="nc-head" onclick="toggleNote(this)"><div class="nc-title">👐 Labor &amp; Extras</div><div class="nc-arr">▼</div></div>
+    <div class="nc-body">
+      <span class="tag est">Estimated</span><span class="tag e">Editable</span>
+      <p><strong>Labor:</strong> ~3–6 min/cap at $15–18/hr = $0.75–$1.50/pc. Gets faster with volume.</p>
+      <p><strong>Extras:</strong> Electricity ($0.10–0.20), poly bag + tissue ($0.20–0.35), handling time, tape. Total: $0.50–$1.00/pc.</p>
+      <p><strong>Waste/Shrink:</strong> Failed presses, misaligned transfers, defective blanks (~2–5% rate). Modeled as $0.18–$0.70/pc by volume.</p>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <div class="nav-btn on" id="nav-calc" onclick="goTo('calc')">
+    <div class="nav-ico">🧮</div>
+    <div class="nav-lbl">Calculate</div>
+  </div>
+  <div class="nav-btn" id="nav-quote" onclick="goTo('quote')">
+    <div class="nav-ico">📝</div>
+    <div class="nav-lbl">Quote</div>
+  </div>
+  <div class="nav-btn" id="nav-costs" onclick="goTo('costs')">
+    <div class="nav-ico">⚙️</div>
+    <div class="nav-lbl">Edit Costs</div>
+  </div>
+  <div class="nav-btn" id="nav-research" onclick="goTo('research')">
+    <div class="nav-ico">📊</div>
+    <div class="nav-lbl">Research</div>
+  </div>
+</nav>
+
+<script>
+/* ════════════════════════════════════
+   DATA
+════════════════════════════════════ */
+const DEFAULTS = {
+  ranges:[
+    {label:'1–5',min:1,max:5},
+    {label:'6–20',min:6,max:20},
+    {label:'21–50',min:21,max:50},
+    {label:'51–100',min:51,max:100},
+    {label:'101–150',min:101,max:150},
+    {label:'151–300',min:151,max:300},
+    {label:'300+',min:301,max:9999}
+  ],
+  shipping:[10,16,25,38,52,70,90],
+  qualities:{
+    traditional:{name:'Traditional',costs:[
+      {cap:7.50,transfer:2.60,labor:1.25,extras:1.00,merma:0.50,ms:1.55,mm:1.85,ma:2.15},
+      {cap:6.50,transfer:2.45,labor:1.10,extras:0.85,merma:0.40,ms:1.50,mm:1.80,ma:2.05},
+      {cap:4.75,transfer:2.30,labor:1.00,extras:0.72,merma:0.33,ms:1.45,mm:1.72,ma:1.98},
+      {cap:4.25,transfer:2.15,labor:0.90,extras:0.62,merma:0.28,ms:1.40,mm:1.65,ma:1.90},
+      {cap:4.00,transfer:2.05,labor:0.82,extras:0.55,merma:0.22,ms:1.35,mm:1.60,ma:1.85},
+      {cap:3.75,transfer:1.95,labor:0.78,extras:0.50,merma:0.18,ms:1.30,mm:1.55,ma:1.80},
+      {cap:3.50,transfer:1.85,labor:0.72,extras:0.45,merma:0.15,ms:1.28,mm:1.50,ma:1.75}
+    ]},
+    medio:{name:'Mid-Level',costs:[
+      {cap:9.50,transfer:2.75,labor:1.25,extras:1.00,merma:0.50,ms:1.55,mm:1.85,ma:2.15},
+      {cap:8.50,transfer:2.60,labor:1.10,extras:0.85,merma:0.40,ms:1.50,mm:1.80,ma:2.05},
+      {cap:6.25,transfer:2.45,labor:1.00,extras:0.72,merma:0.33,ms:1.45,mm:1.72,ma:1.98},
+      {cap:5.75,transfer:2.30,labor:0.90,extras:0.62,merma:0.28,ms:1.40,mm:1.65,ma:1.90},
+      {cap:5.50,transfer:2.20,labor:0.82,extras:0.55,merma:0.22,ms:1.35,mm:1.60,ma:1.85},
+      {cap:5.25,transfer:2.10,labor:0.78,extras:0.50,merma:0.18,ms:1.30,mm:1.55,ma:1.80},
+      {cap:5.00,transfer:2.00,labor:0.72,extras:0.45,merma:0.15,ms:1.28,mm:1.50,ma:1.75}
+    ]},
+    premium:{name:'Premium',costs:[
+      {cap:13.50,transfer:3.00,labor:1.50,extras:1.20,merma:0.70,ms:1.60,mm:1.95,ma:2.30},
+      {cap:12.50,transfer:2.85,labor:1.35,extras:1.05,merma:0.55,ms:1.55,mm:1.88,ma:2.20},
+      {cap:9.75,transfer:2.70,labor:1.20,extras:0.88,merma:0.45,ms:1.50,mm:1.80,ma:2.10},
+      {cap:9.00,transfer:2.55,labor:1.00,extras:0.75,merma:0.37,ms:1.45,mm:1.75,ma:2.00},
+      {cap:8.50,transfer:2.45,labor:0.92,extras:0.65,merma:0.32,ms:1.40,mm:1.68,ma:1.95},
+      {cap:8.00,transfer:2.35,labor:0.88,extras:0.60,merma:0.27,ms:1.35,mm:1.62,ma:1.90},
+      {cap:7.50,transfer:2.25,labor:0.82,extras:0.55,merma:0.22,ms:1.30,mm:1.55,ma:1.85}
+    ]}
+  }
+};
+
+let D = JSON.parse(JSON.stringify(DEFAULTS));
+try{ const s=localStorage.getItem('gnb3'); if(s) D=JSON.parse(s); }catch(e){}
+
+let quality='traditional', margin='medium', qStyle='simple';
+
+/* ════════════════════════════════════
+   HELPERS
+════════════════════════════════════ */
+const $ = id => document.getElementById(id);
+const fmtD = (n,d=2) => '$'+n.toFixed(d);
+
+function getRangeIdx(q){
+  for(let i=0;i<D.ranges.length;i++) if(q>=D.ranges[i].min&&q<=D.ranges[i].max) return i;
+  return D.ranges.length-1;
+}
+function roundHalf(v){ return Math.round(v*2)/2; }
+
+function compute(qual,q,m){
+  const idx=getRangeIdx(q);
+  const c=D.qualities[qual].costs[idx];
+  const sp=D.shipping[idx]/q;
+  const cp=c.cap+c.transfer+c.labor+c.extras+c.merma+sp;
+  const mult=m==='soft'?c.ms:m==='medium'?c.mm:c.ma;
+  const pv=roundHalf(cp*mult);
+  const gp=pv-cp;
+  return {cp,pv,gp,gt:gp*q,mu:(gp/pv)*100,idx,c,sp};
+}
+
+/* ════════════════════════════════════
+   CALC
+════════════════════════════════════ */
+function calc(){
+  const qEl=$('qty');
+  let q=parseInt(qEl.value)||1;
+  if(q<1)q=1;
+
+  const idx=getRangeIdx(q);
+  const rl=D.ranges[idx].label;
+  $('hdr-badge').textContent=rl+' pcs';
+
+  const c=D.qualities[quality].costs[idx];
+  $('ms-s').textContent='×'+c.ms.toFixed(2);
+  $('ms-m').textContent='×'+c.mm.toFixed(2);
+  $('ms-a').textContent='×'+c.ma.toFixed(2);
+
+  const sel=compute(quality,q,margin);
+  const mLbl=margin==='soft'?'SOFT':margin==='medium'?'MEDIUM':'AGGRESSIVE';
+  const qnm=D.qualities[quality].name;
+
+  $('rh-label').textContent=`PRICE PER PIECE · ${mLbl}`;
+  $('rh-price').textContent=fmtD(sel.pv);
+  $('rh-sub').textContent=`${qnm} · ${q} pieces`;
+  $('rh-cost').textContent=fmtD(sel.cp);
+  $('rh-gp').textContent=fmtD(sel.gp);
+  $('rh-gt').textContent=fmtD(sel.gt,0);
+
+  const rs=compute(quality,q,'soft');
+  const rm=compute(quality,q,'medium');
+  const ra=compute(quality,q,'aggressive');
+
+  $('til-s').textContent=fmtD(rs.pv);
+  $('til-s-m').textContent=rs.mu.toFixed(0)+'% margin';
+  $('til-s-t').textContent=fmtD(rs.gt,0)+' profit';
+  $('til-m').textContent=fmtD(rm.pv);
+  $('til-m-m').textContent=rm.mu.toFixed(0)+'% margin';
+  $('til-m-t').textContent=fmtD(rm.gt,0)+' profit';
+  $('til-a').textContent=fmtD(ra.pv);
+  $('til-a-m').textContent=ra.mu.toFixed(0)+'% margin';
+  $('til-a-t').textContent=fmtD(ra.gt,0)+' profit';
+
+  $('bd-cap').textContent=fmtD(sel.c.cap);
+  $('bd-tr').textContent=fmtD(sel.c.transfer);
+  $('bd-lb').textContent=fmtD(sel.c.labor);
+  $('bd-ex').textContent=fmtD(sel.c.extras);
+  $('bd-me').textContent=fmtD(sel.c.merma);
+  $('bd-sh').textContent=fmtD(sel.sp);
+  $('bd-cp').textContent=fmtD(sel.cp);
+
+  // quick picks
+  const presets=[1,6,12,24,50,100,150,300];
+  document.querySelectorAll('.qp').forEach((el,i)=>
+    el.classList.toggle('on',presets[i]===q));
+
+  genQ();
+}
+
+function adj(delta){
+  const el=$('qty');
+  const cur=parseInt(el.value)||1;
+  const step=cur<10?1:cur<25?5:cur<100?10:25;
+  el.value=Math.max(1,cur+delta*step);
+  calc();
+}
+function setQ(n){ $('qty').value=n; calc(); }
+
+function setQual(el){
+  quality=el.dataset.q;
+  document.querySelectorAll('[data-q]').forEach(e=>e.classList.remove('q-on'));
+  el.classList.add('q-on');
+  calc();
+}
+
+function setMargin(el){
+  margin=el.dataset.m;
+  document.querySelectorAll('[data-m]').forEach(e=>e.classList.remove('m-on'));
+  el.classList.add('m-on');
+  document.querySelectorAll('.tile').forEach(t=>t.classList.remove('picked'));
+  const map={soft:'t-soft',medium:'t-medium',aggressive:'t-agg'};
+  document.querySelector('.'+map[margin])?.classList.add('picked');
+  calc();
+}
+
+function pickTile(m){
+  margin=m;
+  document.querySelectorAll('[data-m]').forEach(e=>e.classList.remove('m-on'));
+  document.querySelector(`[data-m="${m}"]`)?.classList.add('m-on');
+  document.querySelectorAll('.tile').forEach(t=>t.classList.remove('picked'));
+  const map={soft:'t-soft',medium:'t-medium',aggressive:'t-agg'};
+  document.querySelector('.'+map[m])?.classList.add('picked');
+  calc();
+}
+
+function toggleBd(){
+  const rows=$('bd-rows'), arr=$('bd-arr');
+  const o=rows.classList.toggle('show');
+  arr.textContent=o?'▲':'▼';
+  arr.classList.toggle('open',o);
+}
+
+/* ════════════════════════════════════
+   NAVIGATION
+════════════════════════════════════ */
+function goTo(tab){
+  ['calc','quote','costs','research'].forEach(t=>{
+    $(`scr-${t}`).classList.toggle('show',t===tab);
+    $(`nav-${t}`).classList.toggle('on',t===tab);
+  });
+  if(tab==='quote') genQ();
+  if(tab==='costs') buildCE();
+  window.scrollTo(0,0);
+}
+
+/* ════════════════════════════════════
+   QUOTE
+════════════════════════════════════ */
+function setQS(s){
+  qStyle=s;
+  $('qs-simple').classList.toggle('q-on',s==='simple');
+  $('qs-detailed').classList.toggle('q-on',s==='detailed');
+  genQ();
+}
+
+function genQ(){
+  const q=parseInt($('qty')?.value)||1;
+  const client=($('client')?.value||'').trim();
+  const qnm=D.qualities[quality].name;
+  const today=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  const rs=compute(quality,q,'soft');
+  const rm=compute(quality,q,'medium');
+  const ra=compute(quality,q,'aggressive');
+  const sel=margin==='soft'?rs:margin==='medium'?rm:ra;
+  const mLbl=margin==='soft'?'Soft':margin==='medium'?'Medium':'Aggressive';
+  const cl=client?`For: ${client}\n`:'';
+
+  let main;
+  if(qStyle==='simple'){
+    main=
+`━━ QUOTE · GRAIN & BRAND STUDIO ━━
+${cl}Date: ${today} | Valid: 7 days
+
+📦 ${q} Custom Caps — ${qnm}
+   DTF Front Print
+
+   Per piece:  ${fmtD(sel.pv)}
+   Total:      ${fmtD(sel.pv*q,0)}
+
+Includes cap + DTF transfer, pressing,
+QC & standard US shipping.
+
+Reply to confirm! — G&B Studio`;
+  } else {
+    main=
+`━━ DETAILED QUOTE · G&B STUDIO ━━
+${cl}Date: ${today} | Valid: 7 days
+
+PRODUCT: ${qnm} Cap — DTF Front Print
+QTY: ${q} pcs | Margin: ${mLbl}
+
+PRICE:
+  Per piece:   ${fmtD(sel.pv)}
+  Total:       ${fmtD(sel.pv*q,0)}
+
+INCLUDED:
+  ✓ Blank ${qnm} cap
+  ✓ Custom DTF transfer (your design)
+  ✓ Professional heat press
+  ✓ QC & packaging
+  ✓ Standard US shipping
+
+TURNAROUND: 5–7 business days
+after artwork approval
+
+NEXT STEPS:
+  1. Confirm qty & send design file
+  2. 50% deposit to start
+  3. Balance before shipment
+
+— Grain & Brand Studio`;
+  }
+
+  const all=
+`━━ ALL PRICING OPTIONS ━━
+${q}× ${qnm} Cap | ${today}
+
+SOFT — Close the deal:
+  ${fmtD(rs.pv)}/pc · Total: ${fmtD(rs.pv*q,0)}
+  Margin: ${rs.mu.toFixed(0)}% | Profit: ${fmtD(rs.gt,0)}
+
+MEDIUM — Recommended:
+  ${fmtD(rm.pv)}/pc · Total: ${fmtD(rm.pv*q,0)}
+  Margin: ${rm.mu.toFixed(0)}% | Profit: ${fmtD(rm.gt,0)}
+
+AGGRESSIVE — Max profit:
+  ${fmtD(ra.pv)}/pc · Total: ${fmtD(ra.pv*q,0)}
+  Margin: ${ra.mu.toFixed(0)}% | Profit: ${fmtD(ra.gt,0)}
+
+— Grain & Brand Studio`;
+
+  const qm=$('q-main'), qa=$('q-all');
+  if(qm) qm.textContent=main;
+  if(qa) qa.textContent=all;
+}
+
+function copyQ(contentId, btnId){
+  const text=$(contentId)?.textContent||'';
+  navigator.clipboard.writeText(text).then(()=>{
+    if(!btnId) return;
+    const btn=$(btnId);
+    const orig=btn.innerHTML;
+    btn.innerHTML='✅ Copied!';
+    btn.classList.add('ok');
+    setTimeout(()=>{ btn.innerHTML=orig; btn.classList.remove('ok'); },2000);
+  });
+}
+
+/* ════════════════════════════════════
+   COST EDITOR
+════════════════════════════════════ */
+function buildCE(){
+  const container=$('ce-container');
+  container.innerHTML='';
+
+  const icons={traditional:'🧢',medio:'⭐',premium:'👑'};
+  const fields=[
+    ['cap','Blank Cap ($)'],['transfer','DTF Transfer ($)'],
+    ['labor','Labor ($)'],['extras','Extras ($)'],['merma','Waste/Shrink ($)'],
+    ['ms','Margin Soft (×)'],['mm','Margin Medium (×)'],['ma','Margin Aggressive (×)']
+  ];
+
+  // Shipping
+  const sg=makeGroup('🚚','Shipping (total per order)');
+  const sbody=sg.querySelector('.ce-body');
+  D.ranges.forEach((r,i)=>{
+    sbody.appendChild(makeRow(r.label+' pcs', D.shipping[i],
+      v=>{ D.shipping[i]=parseFloat(v)||0; save(); calc(); }));
+  });
+  container.appendChild(sg);
+
+  // Quality groups
+  Object.keys(D.qualities).forEach(qk=>{
+    const qd=D.qualities[qk];
+    const g=makeGroup(icons[qk], qd.name+' Cap');
+    const gb=g.querySelector('.ce-body');
+    D.ranges.forEach((r,ri)=>{
+      const rh=document.createElement('div');
+      rh.className='ce-range-hdr';
+      rh.textContent=r.label+' pieces';
+      gb.appendChild(rh);
+      fields.forEach(([fk,fl])=>{
+        gb.appendChild(makeRow(fl, qd.costs[ri][fk],
+          v=>{ qd.costs[ri][fk]=parseFloat(v)||0; save(); calc(); }));
+      });
+    });
+    container.appendChild(g);
+  });
+}
+
+function makeGroup(ico, title){
+  const g=document.createElement('div');
+  g.className='ce-group';
+  g.innerHTML=`
+    <div class="ce-head" onclick="toggleCE(this)">
+      <div class="ce-head-l">
+        <div class="ce-head-ico">${ico}</div>
+        <div class="ce-head-title">${title}</div>
+      </div>
+      <div class="ce-head-arr">▼</div>
+    </div>
+    <div class="ce-body"></div>`;
+  return g;
+}
+
+function makeRow(label, value, onChange){
+  const row=document.createElement('div');
+  row.className='ce-row';
+  row.innerHTML=`<div class="ce-row-lbl">${label}</div><input class="ce-inp" type="number" step="0.05" value="${value}">`;
+  row.querySelector('input').addEventListener('change',e=>onChange(e.target.value));
+  return row;
+}
+
+function toggleCE(head){
+  const body=head.nextElementSibling;
+  const arr=head.querySelector('.ce-head-arr');
+  const o=body.classList.toggle('show');
+  arr.textContent=o?'▲':'▼';
+  arr.classList.toggle('open',o);
+}
+
+function save(){
+  try{ localStorage.setItem('gnb3',JSON.stringify(D)); }catch(e){}
+}
+
+function resetAll(){
+  if(confirm('Reset all costs to defaults?')){
+    D=JSON.parse(JSON.stringify(DEFAULTS));
+    localStorage.removeItem('gnb3');
+    buildCE(); calc();
+  }
+}
+
+/* ════════════════════════════════════
+   RESEARCH NOTES
+════════════════════════════════════ */
+function toggleNote(head){
+  const body=head.nextElementSibling;
+  const arr=head.querySelector('.nc-arr');
+  const o=body.classList.toggle('show');
+  arr.textContent=o?'▲':'▼';
+  arr.classList.toggle('open',o);
+}
+
+/* ════════════════════════════════════
+   INIT
+════════════════════════════════════ */
+calc();
+</script>
+</body>
+</html>
