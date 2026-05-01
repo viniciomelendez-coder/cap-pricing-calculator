@@ -1317,7 +1317,30 @@ function toggleNote(head){
    INIT
 ════════════════════════════════════ */
 calc();
+function shareApp() {
+  if (navigator.share) {
+    navigator.share({
+      title: 'Cap Pricing Calculator',
+      text: 'Check out this pricing tool 👇',
+      url: window.location.href
+    });
+  } else {
+    navigator.clipboard.writeText(window.location.href);
+    alert('Link copied!');
+  }
 </script>
+<div style="text-align:center; margin-top:20px;">
+  <button onclick="shareApp()" style="
+    background:#B88B2A;
+    color:#fff;
+    border:none;
+    padding:12px 20px;
+    border-radius:10px;
+    font-size:14px;
+  ">
+    Share this tool
+  </button>
+</div>
 <div style="
   text-align:center;
   font-size:15px;
